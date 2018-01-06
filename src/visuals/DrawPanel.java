@@ -2,8 +2,11 @@ package visuals;
 
 import gui.GamePlannerTool;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 
 /**
  * Nodes/etc will be drawn inside this

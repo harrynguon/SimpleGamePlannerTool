@@ -1,6 +1,6 @@
 import gui.GamePlannerTool;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 
 public class Main {
 

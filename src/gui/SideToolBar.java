@@ -1,6 +1,7 @@
 package gui;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JToolBar;
 
 public class SideToolBar extends JToolBar {
 

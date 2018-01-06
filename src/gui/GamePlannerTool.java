@@ -2,8 +2,11 @@ package gui;
 
 import visuals.DrawPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.HeadlessException;
 
 /**
  * Controls the whole application
