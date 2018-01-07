@@ -73,8 +73,7 @@ public class SideToolBar extends JToolBar {
                 "Click on Add Node with nothing selected to add a new parent node.\n" +
                 "Select on an existing node and click on the Add " +
                 "Node button to add a child to a parent node.\nTo " +
-                "delete a node, click on the desired node and click the Delete Node button.\n\n " +
-                "Made by Harry Nguon",
+                "delete a node, click on the desired node and click the Delete Node button.",
                 "Information",
                 1);
     }
