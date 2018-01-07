@@ -1,6 +1,7 @@
 package gui;
 
 import node.Node;
+import util.Constants;
 import visuals.DrawPanel;
 
 import javax.swing.JFrame;
@@ -26,8 +27,11 @@ public class GamePlannerTool extends JFrame {
     private List<Node> nodes;
     private int nodeSeparationX = 50;
     private int nodeSeparationY = 100;
+    private final int nodeHeight = 35;
     private int defaultParentY = 50;
     private final int defaultSeparationX = 35;
+
+    private Optional<Node> nodeSelected = Optional.empty();
 
     public GamePlannerTool(String title) throws HeadlessException {
         super(title);
@@ -57,27 +61,39 @@ public class GamePlannerTool extends JFrame {
     /**
      * @param label @NonNull
      */
-    public void addParentNode(String label) {
-        nodes.add(new Node(nodeSeparationX, defaultParentY, label));
-        addNodeSeparationX(this.getGraphics().getFontMetrics().stringWidth(label));
+    public void addNode(String label) {
+        int labelTextWidth = this.getGraphics().getFontMetrics().stringWidth(label);
+        // add child node
+        if (nodeSelected.isPresent()) {
+            Node parentNode = nodeSelected.get();
+            Node childNode = new Node(parentNode.getX(), parentNode.getY() + Constants.NODE_Y,
+                    label);
+            childNode.setWidth(labelTextWidth + Constants.NODE_BOX_MARGIN * 2);
+            parentNode.addChild(childNode);
+            nodes.add(childNode);
+            nodeSelected = Optional.empty();
+        }
+        // else add parent node
+        else {
+            Node node = new Node(nodeSeparationX, defaultParentY, label);
+            node.setWidth(labelTextWidth + Constants.NODE_BOX_MARGIN * 2);
+            nodes.add(node);
+            addNodeSeparationX(labelTextWidth);
+        }
         drawPanel.repaint();
     }
 
-    /**
-     * Adds node to parent
-     * @param parent
-     * @param label
-     */
-    public void addChildNode(String parent, String label) {
-        Optional<Node> rNode =  nodes.stream()
-                .filter(node -> node.getName().equals(parent))
-                .distinct()
-                .findFirst();
-        if (rNode.isPresent()) {
-            Node parentNode = rNode.get();
-            // parentNode.addChild(parentNode.getX(), parentNode.getY() + 50, label);
+    public void selectNode(int x, int y) {
+        for (Node n : nodes) {
+            if (n.contains(x, y)) {
+                nodeSelected = Optional.of(n);
+                drawPanel.repaint();
+                return;
+            }
         }
+        nodeSelected = Optional.empty();
         drawPanel.repaint();
+        return;
     }
 
     public void addNodeSeparationX(int labelWidth) {
@@ -86,5 +102,9 @@ public class GamePlannerTool extends JFrame {
 
     public List<Node> getNodes() {
         return nodes;
+    }
+
+    public Optional<Node> getNodeSelected() {
+        return nodeSelected;
     }
 }

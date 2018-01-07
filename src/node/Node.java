@@ -1,5 +1,7 @@
 package node;
 
+import util.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ public class Node {
 
     private int x;
     private int y;
+    private int width;
+    private int height = Constants.NODE_HEIGHT;
     private String label;
     private List<Node> children;
 
@@ -26,8 +30,19 @@ public class Node {
     public Node() {
     }
 
-    public void addChild(int x, int y, String label) {
-        children.add(new Node(x, y, label));
+    public boolean contains(int x, int y) {
+        if (x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height) {
+            return true;
+        }
+        return false;
+    }
+
+    public void addChild(Node node) {
+        children.add(node);
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     public List<Node> getChildren() {
@@ -38,6 +53,13 @@ public class Node {
         return label;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 
     public int getX() {
         return x;

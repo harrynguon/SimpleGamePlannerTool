@@ -16,10 +16,7 @@ public class SideToolBar extends JToolBar {
     public SideToolBar initialise() {
         JButton addNodeBtn = new JButton("Add Node");
         addNodeBtn.addActionListener(this::addParentNode);
-        JButton addChildNodeBtn = new JButton("Add Child Node");
-        addChildNodeBtn.setVisible(false); // TODO: when a node is clicked on, display this button
         add(addNodeBtn);
-        add(addChildNodeBtn);
         return this;
     }
 
@@ -33,7 +30,8 @@ public class SideToolBar extends JToolBar {
                 null,
                 "enter name here");
         if (label != null && label.length() >= 3) {
-            instance.addParentNode(label);
+            instance.addNode(label);
         }
     }
+
 }

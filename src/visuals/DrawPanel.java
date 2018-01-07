@@ -1,13 +1,20 @@
 package visuals;
 
 import gui.GamePlannerTool;
+import node.Node;
+import util.Constants;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -15,17 +22,32 @@ import java.awt.Graphics2D;
  */
 public class DrawPanel extends JPanel {
 
-    public static final int PANEL_WIDTH = 3000;
-    public static final int PANEL_HEIGHT = GamePlannerTool.HEIGHT; // 720
-
     private GamePlannerTool instance;
 
     public DrawPanel(GamePlannerTool gamePlannerTool) {
         this.instance = gamePlannerTool;
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                instance.selectNode(e.getX(), e.getY());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
     }
 
     public DrawPanel initialise() {
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        setPreferredSize(new Dimension(Constants.PANEL_WIDTH, Constants.PANEL_HEIGHT));
         JScrollBar scrollBar = new JScrollBar();
         scrollBar.setOrientation(JScrollBar.HORIZONTAL);
         add(scrollBar, BorderLayout.SOUTH);
@@ -34,20 +56,26 @@ public class DrawPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics _g) {
+        super.paintComponent(_g);
         Graphics2D g = (Graphics2D) _g;
-        instance.getNodes().stream()
-                .forEach(node -> {
-                   this.draw(g, node.getX(), node.getY(), node.getName());
-                   node.getChildren().stream()
-                           .forEach(childNode -> this.draw(g, childNode.getX(), childNode.getY(),
-                                    childNode.getName()));
-                });
+        iterateThroughChildren(g, instance.getNodes());
+        Optional<Node> nodeSelected = instance.getNodeSelected();
+        if (nodeSelected.isPresent()) {
+            g.setColor(Color.RED);
+            Node node = nodeSelected.get();
+            draw(g, node.getX(), node.getY(), node.getWidth(), node.getName());
+        }
     }
 
-    private void draw(Graphics2D g, int x, int y, String label) {
-        int labelWidth = g.getFontMetrics().stringWidth(label);
-        g.drawRect(x, y, labelWidth + 14, 40);
-        g.drawString(label, x + 7, y + 20);
+    private void iterateThroughChildren(Graphics2D g, List<Node> children) {
+        for (Node node : children) {
+            this.draw(g, node.getX(), node.getY(), node.getWidth(), node.getName());
+        }
+    }
+
+    private void draw(Graphics2D g, int x, int y, int width, String label) {
+        g.drawRect(x, y, width, Constants.NODE_HEIGHT);
+        g.drawString(label, x + Constants.NODE_BOX_MARGIN, y + Constants.NODE_TEXT_Y_OFFSET);
     }
 
 }
