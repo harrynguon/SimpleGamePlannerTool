@@ -9,6 +9,7 @@ import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import java.util.Optional;
 /**
  * Controls the whole application
  */
-public class GamePlannerTool extends JFrame {
+public class GamePlannerTool extends JFrame implements Serializable {
 
     private DrawPanel drawPanel;
 
@@ -27,7 +28,7 @@ public class GamePlannerTool extends JFrame {
     public GamePlannerTool(String title) throws HeadlessException {
         super(title);
         nodes = new ArrayList<>();
-        nodeSeparationX = 50;
+        nodeSeparationX = Constants.INITIAL_NODE_OFFSET_X;
         nodeSelected = Optional.empty();
     }
 
@@ -58,7 +59,9 @@ public class GamePlannerTool extends JFrame {
         // add child node
         if (nodeSelected.isPresent()) {
             Node parentNode = nodeSelected.get();
-            Node childNode = new Node(parentNode.getX(), parentNode.getY() + Constants.NODE_Y,
+            int childNodeX = parentNode.getX() + (parentNode.getChildren().size() * Constants
+                    .NODE_CHILD_SPACING_X);
+            Node childNode = new Node(childNodeX, parentNode.getY() + Constants.NODE_Y,
                     parentNode.getHierarchyLvl() + 1, label, Optional.of(parentNode));
             childNode.setWidth(labelTextWidth + Constants.NODE_BOX_MARGIN * 2);
             parentNode.addChild(childNode);
@@ -92,7 +95,7 @@ public class GamePlannerTool extends JFrame {
     }
 
     /**
-     * Recursive search and deletion of a node.
+     * Recursive search and delete of a node.
      * @param children sub-children
      * @param target the node to delete
      */

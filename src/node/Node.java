@@ -43,7 +43,13 @@ public class Node {
     }
 
     public void addChild(Node node) {
+        if (children.size() > 0) {
+            for (Node n : children) {
+                n.setX(n.getX() - Constants.NODE_CHILD_SPACING_N);
+            }
+        }
         children.add(node);
+
     }
 
     public void setWidth(int width) {
@@ -88,5 +94,9 @@ public class Node {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setX(int x) {
+        this.x = x;
     }
 }

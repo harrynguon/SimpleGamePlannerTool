@@ -23,15 +23,25 @@ public class SideToolBar extends JToolBar {
         setRollover(true);
         setLayout(new GridLayout(16, 1));
         setOrientation(JToolBar.HORIZONTAL);
-        JButton addNodeBtn = new JButton("Add Node");
-        addNodeBtn.addActionListener(this::addParentNode);
+        // Buttons
+        JButton addNodeBtn =    new JButton("Add Node");
         JButton deleteNodeBtn = new JButton("Delete Node");
+        JButton infoBtn =       new JButton("Info");
+        JButton saveBtn =       new JButton("Save");
+        JButton loadBtn =       new JButton("Load");
+        JButton quitBtn =       new JButton("Quit");
+        addNodeBtn.addActionListener(this::addParentNode);
         deleteNodeBtn.addActionListener(this::deleteNode);
-        JButton infoBtn = new JButton("Info");
         infoBtn.addActionListener(this::info);
-        add(addNodeBtn, BorderLayout.CENTER);
-        add(deleteNodeBtn, BorderLayout.CENTER);
-        add(infoBtn, BorderLayout.CENTER);
+        saveBtn.addActionListener(this::save);
+        loadBtn.addActionListener(this::load);
+        quitBtn.addActionListener(this::quit);
+        add(addNodeBtn,     BorderLayout.CENTER);
+        add(deleteNodeBtn,  BorderLayout.CENTER);
+        add(infoBtn,        BorderLayout.CENTER);
+        add(saveBtn,        BorderLayout.CENTER);
+        add(loadBtn,        BorderLayout.CENTER);
+        add(quitBtn,        BorderLayout.CENTER);
         return this;
     }
 
@@ -67,6 +77,26 @@ public class SideToolBar extends JToolBar {
                 "Made by Harry Nguon",
                 "Information",
                 1);
+    }
+
+    private void save(ActionEvent e) {
+        // TODO: save implementation
+    }
+
+    private void load(ActionEvent e) {
+        // TODO: load implementation
+    }
+
+    private void quit(ActionEvent e) {
+        int dialogResult = JOptionPane.showConfirmDialog(instance,
+                "Exit the application?",
+                "Quit",
+                JOptionPane.YES_NO_OPTION);
+        if(dialogResult == 0) {
+            System.exit(0);
+        } else {
+            System.out.println("No Option");
+        }
     }
 
 }
