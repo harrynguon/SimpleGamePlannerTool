@@ -1,4 +1,5 @@
 import gui.GamePlannerTool;
+import visuals.DrawPanel;
 
 import javax.swing.SwingUtilities;
 
