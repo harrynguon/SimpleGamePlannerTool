@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 
 
 /**
- * Nodes/etc will be drawn inside this
+ * Nodes/etc will be drawn here
  */
 public class DrawPanel extends JPanel {
 
@@ -45,8 +45,9 @@ public class DrawPanel extends JPanel {
     }
 
     private void draw(Graphics2D g, int x, int y, String label) {
-        g.drawRect(x, y, 50, 50);
-        g.drawString(label, x, y);
+        int labelWidth = g.getFontMetrics().stringWidth(label);
+        g.drawRect(x, y, labelWidth + 14, 40);
+        g.drawString(label, x + 7, y + 20);
     }
 
 }

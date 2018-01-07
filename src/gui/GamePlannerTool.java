@@ -24,9 +24,10 @@ public class GamePlannerTool extends JFrame {
     private DrawPanel drawPanel;
 
     private List<Node> nodes;
-    private int nodeSeparationX = 100;
+    private int nodeSeparationX = 50;
     private int nodeSeparationY = 100;
     private int defaultParentY = 50;
+    private final int defaultSeparationX = 35;
 
     public GamePlannerTool(String title) throws HeadlessException {
         super(title);
@@ -39,6 +40,8 @@ public class GamePlannerTool extends JFrame {
      */
     public GamePlannerTool initialise() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         SideToolBar sideToolBar = new SideToolBar(this).initialise();
         DrawPanel drawPanel = new DrawPanel(this).initialise();
@@ -56,7 +59,7 @@ public class GamePlannerTool extends JFrame {
      */
     public void addParentNode(String label) {
         nodes.add(new Node(nodeSeparationX, defaultParentY, label));
-        nodeSeparationX += 100;
+        addNodeSeparationX(this.getGraphics().getFontMetrics().stringWidth(label));
         drawPanel.repaint();
     }
 
@@ -72,11 +75,14 @@ public class GamePlannerTool extends JFrame {
                 .findFirst();
         if (rNode.isPresent()) {
             Node parentNode = rNode.get();
-            parentNode.addChild(parentNode.getX(), parentNode.getY() + 50, label);
+            // parentNode.addChild(parentNode.getX(), parentNode.getY() + 50, label);
         }
         drawPanel.repaint();
     }
 
+    public void addNodeSeparationX(int labelWidth) {
+        nodeSeparationX += labelWidth + defaultSeparationX;
+    }
 
     public List<Node> getNodes() {
         return nodes;
