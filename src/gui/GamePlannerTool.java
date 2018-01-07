@@ -86,8 +86,23 @@ public class GamePlannerTool extends JFrame {
         update();
     }
 
-    public void addNodeSeparationX(int labelWidth) {
-        nodeSeparationX += labelWidth + Constants.NODE_PANEL_SEPARATION_X;
+    public void removeNode(Node toRemove) {
+        nodes.remove(toRemove);
+        deleteNodeAsChild(nodes, toRemove);
+    }
+
+    /**
+     * Recursive search and deletion of a node.
+     * @param children sub-children
+     * @param target the node to delete
+     */
+    private void deleteNodeAsChild(List<Node> children, Node target) {
+        for (Node child : children) {
+            if (child.getChildren().contains(target)) {
+                child.getChildren().remove(target);
+            }
+            deleteNodeAsChild(child.getChildren(), target);
+        }
     }
 
     public void update() {
@@ -98,6 +113,10 @@ public class GamePlannerTool extends JFrame {
     public void update(Optional<Node> nodeSelected) {
         this.nodeSelected = nodeSelected;
         drawPanel.repaint();
+    }
+
+    public void addNodeSeparationX(int labelWidth) {
+        nodeSeparationX += labelWidth + Constants.NODE_PANEL_SEPARATION_X;
     }
 
     public List<Node> getNodes() {

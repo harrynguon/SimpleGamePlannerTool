@@ -53,7 +53,7 @@ public class SideToolBar extends JToolBar {
         if (instance.getNodeSelected().isPresent()) {
             Node toRemove = instance.getNodeSelected().get();
             toRemove.setActive(false);
-            instance.getNodes().remove(toRemove);
+            instance.removeNode(toRemove);
             instance.update();
         }
     }
