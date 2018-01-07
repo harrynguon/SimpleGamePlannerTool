@@ -18,16 +18,17 @@ import java.util.Optional;
  */
 public class GamePlannerTool extends JFrame {
 
-    private SideToolBar sideToolBar;
     private DrawPanel drawPanel;
 
     private List<Node> nodes;
-    private int nodeSeparationX = 50;
-    private Optional<Node> nodeSelected = Optional.empty();
+    private int nodeSeparationX;
+    private Optional<Node> nodeSelected;
 
     public GamePlannerTool(String title) throws HeadlessException {
         super(title);
         nodes = new ArrayList<>();
+        nodeSeparationX = 50;
+        nodeSelected = Optional.empty();
     }
 
     /**
@@ -41,7 +42,6 @@ public class GamePlannerTool extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         SideToolBar sideToolBar = new SideToolBar(this).initialise();
         DrawPanel drawPanel = new DrawPanel(this).initialise();
-        this.sideToolBar = sideToolBar;
         this.drawPanel = drawPanel;
         add(sideToolBar, BorderLayout.EAST);
         add(drawPanel, BorderLayout.CENTER);
@@ -59,7 +59,7 @@ public class GamePlannerTool extends JFrame {
         if (nodeSelected.isPresent()) {
             Node parentNode = nodeSelected.get();
             Node childNode = new Node(parentNode.getX(), parentNode.getY() + Constants.NODE_Y,
-                    parentNode.getHierarchyLvl() + 1, label);
+                    parentNode.getHierarchyLvl() + 1, label, Optional.of(parentNode));
             childNode.setWidth(labelTextWidth + Constants.NODE_BOX_MARGIN * 2);
             parentNode.addChild(childNode);
             nodes.add(childNode);
@@ -67,7 +67,7 @@ public class GamePlannerTool extends JFrame {
         }
         // else add parent node
         else {
-            Node node = new Node(nodeSeparationX, Constants.DEFAULT_PARENT_Y, 0, label);
+            Node node = new Node(nodeSeparationX, Constants.DEFAULT_PARENT_Y, 0, label, Optional.empty());
             node.setWidth(labelTextWidth + Constants.NODE_BOX_MARGIN * 2);
             nodes.add(node);
             addNodeSeparationX(labelTextWidth);
@@ -78,18 +78,26 @@ public class GamePlannerTool extends JFrame {
     public void selectNode(int x, int y) {
         for (Node n : nodes) {
             if (n.contains(x, y)) {
-                nodeSelected = Optional.of(n);
-                drawPanel.repaint();
+                update(Optional.of(n));
                 return;
             }
         }
         // no node was clicked on
+        update();
+    }
+
+    public void addNodeSeparationX(int labelWidth) {
+        nodeSeparationX += labelWidth + Constants.NODE_PANEL_SEPARATION_X;
+    }
+
+    public void update() {
         nodeSelected = Optional.empty();
         drawPanel.repaint();
     }
 
-    public void addNodeSeparationX(int labelWidth) {
-        nodeSeparationX += labelWidth + Constants.NODE_SEPARATION_X;
+    public void update(Optional<Node> nodeSelected) {
+        this.nodeSelected = nodeSelected;
+        drawPanel.repaint();
     }
 
     public List<Node> getNodes() {
@@ -99,4 +107,9 @@ public class GamePlannerTool extends JFrame {
     public Optional<Node> getNodeSelected() {
         return nodeSelected;
     }
+
+    public DrawPanel getDrawPanel() {
+        return drawPanel;
+    }
+
 }

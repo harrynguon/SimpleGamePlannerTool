@@ -18,6 +18,7 @@ public class Node {
     private int hierarchyLvl;
     private String label;
     private List<Node> children;
+    private boolean active;
     private Optional<Node> parent;
 
     public Node(int x, int y, int hierarchyLvl, String label, Optional<Node> parent) {
@@ -27,11 +28,15 @@ public class Node {
         this.hierarchyLvl = hierarchyLvl;
         this.label = label;
         this.children = new ArrayList<>();
+        this.active = true;
         this.parent = parent;
     }
 
     public boolean contains(int x, int y) {
-        if (x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height) {
+        if (x >= this.x
+                && x <= this.x + this.width
+                && y >= this.y
+                && y <= this.y + this.height) {
             return true;
         }
         return false;
@@ -72,8 +77,16 @@ public class Node {
     public int getHierarchyLvl() {
         return hierarchyLvl;
     }
-    
+
     public Optional<Node> getParent() {
         return parent;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

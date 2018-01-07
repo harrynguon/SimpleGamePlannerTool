@@ -70,12 +70,23 @@ public class DrawPanel extends JPanel {
     private void iterateThroughChildren(Graphics2D g, List<Node> children) {
         for (Node node : children) {
             this.draw(g, node.getX(), node.getY(), node.getWidth(), node.getName());
+            if (node.getParent().isPresent() && node.getParent().get().isActive()) {
+                drawArrow(g, node.getParent().get(), node);
+            }
         }
     }
 
     private void draw(Graphics2D g, int x, int y, int width, String label) {
         g.drawRect(x, y, width, Constants.NODE_HEIGHT);
         g.drawString(label, x + Constants.NODE_BOX_MARGIN, y + Constants.NODE_TEXT_Y_OFFSET);
+    }
+
+    private void drawArrow(Graphics g, Node parent, Node child) {
+        int x1 = parent.getX() + parent.getWidth() / 2;
+        int y1 = parent.getY() + parent.getHeight();
+        int x2 = child.getX() + child.getWidth() / 2;
+        int y2 = child.getY();
+        g.drawLine(x1, y1, x2, y2);
     }
 
 }
